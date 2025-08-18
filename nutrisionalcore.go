@@ -40,3 +40,36 @@ type NutrisionalData struct {
 	Protein ProteinGram
 	IsWater bool
 }
+
+func GetPoints(e EnergyKJ) GetPoints(st ScoreType) int{
+
+}
+
+func GetPoints(s SugarsGram) GetPoints(st ScoreType) int{
+
+}
+
+func GetPoints(sfa SaturatedFattyAcidsGram) GetPoints(st ScoreType) int{
+}
+
+func GetNutrisionalSco(n NutrisionalData, st ScoreType) NutrisionalScore{
+
+	value := 0
+	positive := 0
+	negative := 0
+
+	if st != Water {
+		fruitPoints := n.Fruits.GetPoints(st)
+		fibrePoints := n.Fibre.GetPoints(st)
+
+		negative = n.Energy.GetPoints(st) + n.Sugars.GetPoints(st) + n.SaturatedFattyAcids.GetPoints(st) + n.Sodium.GetPoints(st)
+		positive = fruitPoints + fibrePoints + n.Protein.GetPoints(st)
+	}
+
+	return NutrisionalScore{
+		Value: value,
+		Positive: positive,
+		Negative: negative,
+		ScoreType: st,
+	}
+}
