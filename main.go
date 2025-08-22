@@ -14,7 +14,7 @@ type NutrisionalScore struct {
 }
 
 func calculateScore(energy, sugars, sfa, sodium, fruits, fibre, protein float64) NutrisionalScore {
-	
+
 	negative := 0
 	if energy > 670 {
 		negative++
@@ -59,13 +59,13 @@ var tpl = template.Must(template.New("form").Parse(`
 <body>
 	<h2>Nutriscore Calculator</h2>
 	<form method="POST" action="/">
-		<label>Energy (kcal): <input type="number" name="energy" step="0.1"></label>
-		<label>Sugars (g): <input type="number" name="sugars" step="0.1"></label>
-		<label>Saturated Fat (g): <input type="number" name="sfa" step="0.1"></label>
-		<label>Sodium (mg): <input type="number" name="sodium" step="0.1"></label>
-		<label>Fruits (%): <input type="number" name="fruits" step="0.1"></label>
-		<label>Fibre (g): <input type="number" name="fibre" step="0.1"></label>
-		<label>Protein (g): <input type="number" name="protein" step="0.1"></label>
+		<label>Energy (kcal): <input type="number" name="energy" step="0.1" min="0"></label>
+		<label>Sugars (g): <input type="number" name="sugars" step="0.1" min="0"></label>
+		<label>Saturated Fat (g): <input type="number" name="sfa" step="0.1" min="0"></label>
+		<label>Sodium (mg): <input type="number" name="sodium" step="0.1" min="0"></label>
+		<label>Fruits (%): <input type="number" name="fruits" step="0.1" min="0"></label>
+		<label>Fibre (g): <input type="number" name="fibre" step="0.1" min="0"></label>
+		<label>Protein (g): <input type="number" name="protein" step="0.1" min="0"></label>
 		<br>
 		<button type="submit">Hitung</button>
 	</form>
@@ -88,6 +88,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		fruits, _ := strconv.ParseFloat(r.FormValue("fruits"), 64)
 		fibre, _ := strconv.ParseFloat(r.FormValue("fibre"), 64)
 		protein, _ := strconv.ParseFloat(r.FormValue("protein"), 64)
+
+		// 🚨 Validation: reject negative values
+		if energy < 0 || sugars < 0 || sfa < 0 || sodium < 0 || fruits < 0 || fibre < 0 || protein < 0 {
+			http.Error(w, "Input tidak boleh negatif!", http.StatusBadRequest)
+			return
+		}
 
 		score := calculateScore(energy, sugars, sfa, sodium, fruits, fibre, protein)
 		tpl.Execute(w, score)
