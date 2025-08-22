@@ -71,6 +71,7 @@ var tpl = template.Must(template.New("form").Parse(`
 	</form>
 	{{if .}}
 		<h3>Hasil:</h3>
+		<p>Nilai Nutriscore: {{.Value}}</p>
 		<p>Negative: {{.Negative}}</p>
 		<p>Positive: {{.Positive}}</p>
 		<p>Score: {{.Value}}</p>
