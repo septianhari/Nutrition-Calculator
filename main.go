@@ -81,13 +81,41 @@ var tpl = template.Must(template.New("form").Parse(`
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
-		energy, _ := strconv.ParseFloat(r.FormValue("energy"), 64)
-		sugars, _ := strconv.ParseFloat(r.FormValue("sugars"), 64)
-		sfa, _ := strconv.ParseFloat(r.FormValue("sfa"), 64)
-		sodium, _ := strconv.ParseFloat(r.FormValue("sodium"), 64)
-		fruits, _ := strconv.ParseFloat(r.FormValue("fruits"), 64)
-		fibre, _ := strconv.ParseFloat(r.FormValue("fibre"), 64)
-		protein, _ := strconv.ParseFloat(r.FormValue("protein"), 64)
+		energy, err := strconv.ParseFloat(r.FormValue("energy"), 64)
+		if err != nil {
+			http.Error(w, "Invalid energy value", http.StatusBadRequest)
+			return
+		}
+		sugars, err := strconv.ParseFloat(r.FormValue("sugars"), 64)
+		if err != nil {
+			http.Error(w, "Invalid sugars value", http.StatusBadRequest)
+			return
+		}
+		sfa, err := strconv.ParseFloat(r.FormValue("sfa"), 64)
+		if err != nil {
+			http.Error(w, "Invalid saturated fat value", http.StatusBadRequest)
+			return
+		}
+		sodium, err := strconv.ParseFloat(r.FormValue("sodium"), 64)
+		if err != nil {
+			http.Error(w, "Invalid sodium value", http.StatusBadRequest)
+			return
+		}
+		fruits, err := strconv.ParseFloat(r.FormValue("fruits"), 64)
+		if err != nil {
+			http.Error(w, "Invalid fruits value", http.StatusBadRequest)
+			return
+		}
+		fibre, err := strconv.ParseFloat(r.FormValue("fibre"), 64)
+		if err != nil {
+			http.Error(w, "Invalid fibre value", http.StatusBadRequest)
+			return
+		}
+		protein, err := strconv.ParseFloat(r.FormValue("protein"), 64)
+		if err != nil {
+			http.Error(w, "Invalid protein value", http.StatusBadRequest)
+			return
+		}
 
 		// 🚨 Validation: reject negative values
 		if energy < 0 || sugars < 0 || sfa < 0 || sodium < 0 || fruits < 0 || fibre < 0 || protein < 0 {
